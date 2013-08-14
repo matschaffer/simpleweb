@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 import com.google.inject.servlet.ServletModule;
+import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import org.eclipse.jetty.server.DispatcherType;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
@@ -27,9 +28,12 @@ public class App {
                 install(new ServletModule() {
                     @Override
                     protected void configureServlets() {
+                        bind(GuiceContainer.class);
+                        serve("/*").with(GuiceContainer.class);
                     }
                 });
                 bind(GuiceFilter.class);
+                bind(ExampleResource.class);
             }
         });
 
